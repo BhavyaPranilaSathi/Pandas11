@@ -1,0 +1,27 @@
+Pandas11
+
+
+1 Problem 1 : Replace Employee ID with the Unique Identifier
+
+
+
+import pandas as pd
+
+def replace_employee_id(employees: pd.DataFrame, employee_uni: pd.DataFrame) -> pd.DataFrame:
+    df = employees.merge(employee_uni, how= 'left', on= 'id')
+    return df[['unique_id','name']]
+
+
+
+
+2 Problem 2 : Students and Examinations 
+
+
+import pandas as pd
+
+def students_and_examinations(students: pd.DataFrame, subjects: pd.DataFrame, examinations: pd.DataFrame) -> pd.DataFrame:
+    df = examinations.groupby(['student_id','subject_name'])['subject_name'].count().reset_index(name = 'attended_exams')
+    studf= students.merge(subjects,how='cross')
+    result = studf.merge(df,how='left', on=['student_id','subject_name'])
+    result['attended_exams'] = result['attended_exams'].fillna(0)
+    return result[['student_id','student_name','subject_name','attended_exams']].sort_values(by=['student_id', 'subject_name'])
